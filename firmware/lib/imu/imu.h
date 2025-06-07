@@ -20,10 +20,6 @@
 
 // now you can create a config constant that you can use in lino_base_config.h
 
-#ifdef USE_MPU9250_IMU
-    #define IMU MPU9250IMU
-#endif
-
 #ifdef USE_QMI8658_IMU
     #define IMU QMI8658IMU
 #endif
