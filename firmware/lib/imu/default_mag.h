@@ -22,7 +22,6 @@
 //include sensor API headers
 #include "I2Cdev.h"
 #include "AK09918.h"
-#include "QMC5883L.h"
 
 class AK09918MAG: public MAGInterface
 {
@@ -63,49 +62,6 @@ class AK09918MAG: public MAGInterface
             mag_.x = ax * 0.00000015;
             mag_.y = ay * 0.00000015;
             mag_.z = az * 0.00000015;
-
-            return mag_;
-        }
-};
-
-class QMC5883LMAG: public MAGInterface
-{
-    private:
-        //constants specific to the sensor
-
-        // driver objects to be used
-        QMC5883L compass;
-
-        // returned vector for sensor reading
-        geometry_msgs__msg__Vector3 mag_;
-
-    public:
-        QMC5883LMAG()
-        {
-        }
-
-        bool startSensor() override
-        {
-            // here you can override startSensor() function and use the sensor's driver API
-            // to initialize and test the sensor's connection during boot time
-            compass.init();
-            compass.setSamplingRate(200);
-            compass.setRange(2);
-            compass.setOversampling(512);
-
-            return true;
-        }
-
-        geometry_msgs__msg__Vector3 readMagnetometer() override
-        {
-            // here you can override readMagnetometer function and use the sensor's driver API
-            // to grab the data from magnetometer and return as a Vector3 object
-            int16_t ax, ay, az, tt;
-
-            compass.readRaw(&ax, &ay, &az, &tt);
-            mag_.x = ax * 0.0001 / 12000;
-            mag_.y = ay * 0.0001 / 12000;
-            mag_.z = az * 0.0001 / 12000;
 
             return mag_;
         }
