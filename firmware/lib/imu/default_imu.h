@@ -20,7 +20,6 @@
 
 // include sensor API headers
 #include "I2Cdev.h"
-#include "HMC5883L.h"
 #include "QMI8658.h"
 
 class QMI8658IMU : public IMUInterface

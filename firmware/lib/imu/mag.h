@@ -20,10 +20,6 @@
 #include "default_mag.h"
 
 // now you can create a config constant that you can use in lino_base_config.h
-#ifdef USE_HMC5883L_MAG
-    // pass your built in class to MAG macro
-    #define MAG HMC5883LMAG
-#endif
 
 #ifdef USE_AK8963_MAG
     #define MAG AK8963MAG
