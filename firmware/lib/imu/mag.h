@@ -21,10 +21,6 @@
 
 // now you can create a config constant that you can use in lino_base_config.h
 
-#ifdef USE_AK8975_MAG
-    #define MAG AK8975MAG
-#endif
-
 #ifdef USE_AK09918_MAG
     #define MAG AK09918MAG
 #endif
