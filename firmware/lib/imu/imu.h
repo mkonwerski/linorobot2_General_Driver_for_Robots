@@ -19,14 +19,8 @@
 #include "default_imu.h"
 
 // now you can create a config constant that you can use in lino_base_config.h
-
 #ifdef USE_QMI8658_IMU
     #define IMU QMI8658IMU
-#endif
-
-#ifndef IMU
-    #define USE_FAKE_IMU
-    #define IMU FakeIMU
 #endif
 
 #endif

@@ -15,83 +15,55 @@
 #ifndef DEFAULT_IMU
 #define DEFAULT_IMU
 
-//include IMU base interface
+// include IMU base interface
 #include "imu_interface.h"
 
-//include sensor API headers
+// include sensor API headers
 #include "I2Cdev.h"
 #include "HMC5883L.h"
 #include "QMI8658.h"
 
-class FakeIMU: public IMUInterface
+class QMI8658IMU : public IMUInterface
 {
-    private:
-        geometry_msgs__msg__Vector3 accel_;
-        geometry_msgs__msg__Vector3 gyro_;
+private:
+    QMI8658 qmi8658_;
 
-    public:
-        FakeIMU()
+    geometry_msgs__msg__Vector3 accel_;
+    geometry_msgs__msg__Vector3 gyro_;
+
+public:
+    QMI8658IMU()
+    {
+    }
+
+    bool startSensor() override
+    {
+        if (qmi8658_.begin() == 0)
         {
+            return false;
         }
+        return true;
+    }
 
-        bool startSensor() override
-        {
-            return true;
-        }
+    geometry_msgs__msg__Vector3 readAccelerometer() override
+    {
+        float ac[3];
+        qmi8658_.read_acc(ac);
+        accel_.x = ac[0];
+        accel_.y = ac[1];
+        accel_.z = ac[2];
+        return accel_;
+    }
 
-        geometry_msgs__msg__Vector3 readAccelerometer() override
-        {
-            accel_.z = 9.8;
-            return accel_;
-        }
-
-        geometry_msgs__msg__Vector3 readGyroscope() override
-        {
-            return gyro_;
-        }
-};
-
-class QMI8658IMU: public IMUInterface
-{
-    private:
-        QMI8658 qmi8658_;
-
-        geometry_msgs__msg__Vector3 accel_;
-        geometry_msgs__msg__Vector3 gyro_;
-
-    public:
-        QMI8658IMU()
-        {
-        }
-
-        bool startSensor() override
-        {
-            if (qmi8658_.begin() == 0){
-                // Serial.println("qmi8658_init fail");
-                return false;
-            }
-            return true;
-        }
-
-        geometry_msgs__msg__Vector3 readAccelerometer() override
-        {
-            float ac[3];
-            qmi8658_.read_acc(ac);
-            accel_.x = ac[0];
-            accel_.y = ac[1];
-            accel_.z = ac[2];
-            return accel_;
-        }
-
-        geometry_msgs__msg__Vector3 readGyroscope() override
-        {
-            float gy[3];
-            qmi8658_.read_gyro(gy);
-            gyro_.x = gy[0];
-            gyro_.y = gy[1];
-            gyro_.z = gy[2];
-            return gyro_;
-        }
+    geometry_msgs__msg__Vector3 readGyroscope() override
+    {
+        float gy[3];
+        qmi8658_.read_gyro(gy);
+        gyro_.x = gy[0];
+        gyro_.y = gy[1];
+        gyro_.z = gy[2];
+        return gyro_;
+    }
 };
 
 #endif
