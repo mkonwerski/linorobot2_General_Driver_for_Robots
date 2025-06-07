@@ -21,65 +21,8 @@
 //include sensor API headers
 #include "I2Cdev.h"
 #include "HMC5883L.h"
-#include "MPU6050.h"
 #include "MPU9250.h"
 #include "QMI8658.h"
-
-class MPU6050IMU: public IMUInterface
-{
-    private:
-        const float accel_scale_ = 1 / 16384.0;
-        const float gyro_scale_ = 1 / 131.0;
-
-        MPU6050 accelgyro_;
-
-        geometry_msgs__msg__Vector3 accel_;
-        geometry_msgs__msg__Vector3 gyro_;
-
-    public:
-        MPU6050IMU()
-        {
-        }
-
-        bool startSensor() override
-        {
-            bool ret;
-            accelgyro_.initialize();
-            ret = accelgyro_.testConnection();
-            if(!ret)
-                return false;
-
-            accelgyro_.CalibrateAccel();
-            accelgyro_.CalibrateGyro();
-            return true;
-        }
-
-        geometry_msgs__msg__Vector3 readAccelerometer() override
-        {
-            int16_t ax, ay, az;
-
-            accelgyro_.getAcceleration(&ax, &ay, &az);
-
-            accel_.x = ax * (double) accel_scale_ * g_to_accel_;
-            accel_.y = ay * (double) accel_scale_ * g_to_accel_;
-            accel_.z = az * (double) accel_scale_ * g_to_accel_;
-
-            return accel_;
-        }
-
-        geometry_msgs__msg__Vector3 readGyroscope() override
-        {
-            int16_t gx, gy, gz;
-
-            accelgyro_.getRotation(&gx, &gy, &gz);
-
-            gyro_.x = gx * (double) gyro_scale_ * DEG_TO_RAD;
-            gyro_.y = gy * (double) gyro_scale_ * DEG_TO_RAD;
-            gyro_.z = gz * (double) gyro_scale_ * DEG_TO_RAD;
-
-            return gyro_;
-        }
-};
 
 class MPU9250IMU: public IMUInterface
 {
@@ -207,14 +150,3 @@ class QMI8658IMU: public IMUInterface
 };
 
 #endif
-//ADXL345 https://www.sparkfun.com/datasheets/Sensors/Accelerometer/ADXL345.pdf
-//HMC8553L https://cdn-shop.adafruit.com/datasheets/HMC5883L_3-Axis_Digital_Compass_IC.pdf
-//ITG320 https://www.sparkfun.com/datasheets/Sensors/Gyro/PS-ITG-3200-00-01.4.pdf
-
-
-//MPU9150 https://www.invensense.com/wp-content/uploads/2015/02/PS-MPU-9250A-01-v1.1.pdf
-//MPU9250 https://www.invensense.com/wp-content/uploads/2015/02/MPU-9150-Datasheet.pdf
-//MPU6050 https://store.invensense.com/datasheets/invensense/MPU-6050_DataSheet_V3%204.pdf
-
-//http://www.sureshjoshi.com/embedded/invensense-imus-what-to-know/
-//https://stackoverflow.com/questions/19161872/meaning-of-lsb-unit-and-unit-lsb

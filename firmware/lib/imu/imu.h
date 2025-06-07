@@ -15,18 +15,10 @@
 #ifndef IMU_CONFIG_H
 #define IMU_CONFIG_H
 
-#if defined(USE_MPU9150_IMU) && !defined(USE_MPU6050_IMU)
-#define USE_MPU6050_IMU
-#endif
-
 // include the header of your new driver here similar to default_imu.h
 #include "default_imu.h"
 
 // now you can create a config constant that you can use in lino_base_config.h
-
-#ifdef USE_MPU6050_IMU
-    #define IMU MPU6050IMU
-#endif
 
 #ifdef USE_MPU9250_IMU
     #define IMU MPU9250IMU
