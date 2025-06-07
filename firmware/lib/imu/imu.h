@@ -23,10 +23,6 @@
 #include "default_imu.h"
 
 // now you can create a config constant that you can use in lino_base_config.h
-#ifdef USE_GY85_IMU
-    // pass your built in class to IMU macro
-    #define IMU GY85IMU
-#endif
 
 #ifdef USE_MPU6050_IMU
     #define IMU MPU6050IMU
